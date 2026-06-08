@@ -1,55 +1,191 @@
-# 🔥 Forge — Your Daily Coach
+# 🔥 Forge — Calorie Tracker & AI Coach
 
-A complete, production-ready fitness app that lives entirely on your phone.
-Calorie tracking, training plans, and the kind of consistency that actually
-changes your body — without selling your data to anyone.
+A complete, production-ready fitness app built with **Capacitor** (web tech wrapped in a real native Android shell). This guide takes you from zero to a published app on Google Play.
 
-Built with vanilla JavaScript and Capacitor, packaged as a native Android
-app. No frameworks, no backend, no accounts. Your data never leaves the
-device.
-
-## What it does
-
-- **Smart onboarding** that calculates your real targets using Mifflin-St Jeor
-  BMR, activity multipliers, and evidence-based macro splits
-- **Daily dashboard** — calorie ring, macros, water, steps, today's workout
-- **Food log** — 60+ foods, custom entries, favorites, recents, saveable meals
-- **Live workout logger** — log sets/reps/weight in real time with an automatic
-  rest timer; pre-fills your last session's weights
-- **Auto personal records** with estimated 1-rep max from your logged sets
-- **Cardio tracker** — calorie burn from MET values and your body weight
-- **Body tracking** — weight chart, measurements, Navy-method body-fat estimate,
-  progress photos
-- **History** — calendar of every logged day
-- **Weekly review** — auto-generated insights and adherence score
-- **24 achievements**, reminders, exercise library, JSON data export
-
-## Why
-
-Most fitness apps either sell your data, hide features behind a subscription,
-or both. Forge is what a fitness app should be: useful, complete, fast,
-private. One person's data, one person's phone, end of story.
-
-## Tech
-
-- Vanilla JS — no React, no framework, no build step
-- Capacitor for native Android wrapping
-- Native plugins: Camera, Filesystem, Local Notifications, Haptics, Preferences
-- Stores all data locally via `@capacitor/preferences`
-
-## Status
-
-v1.0 — fully functional, ready to ship to Google Play. Build instructions
-included in the repo (`README.md`).
+> **You do not need to be a developer to follow this.** Every command is spelled out. Budget about 2–3 hours for your first build, most of which is installing tools and waiting for downloads.
 
 ---
 
-Not medical advice. Calorie and macro estimates use established formulas
-A full-featured Android fitness app — calorie tracking, training plans,
-live workout logger with rest timer, auto-detected personal records,
-cardio, body measurements, progress photos, achievements, and a weekly
-review. Built with vanilla JS + Capacitor. 100% offline, all data stays
-on the device.
-and general best-practice training principles, but they're a starting point,
-not a prescription. Consult a doctor or registered dietitian for any
-health conditions.
+## What's inside
+
+```
+forge-coach-app/
+├── www/                    ← the entire app (this is what runs)
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+├── resources/              ← app icon + splash screen sources
+│   ├── icon.png            (1024×1024 — used to generate all icon sizes)
+│   ├── splash.png          (2732×2732 — used for the launch screen)
+│   ├── icon-source.svg
+│   └── splash-source.svg
+├── capacitor.config.json   ← app name, ID, splash/status bar config
+├── package.json            ← dependencies
+└── README.md               ← you are here
+```
+
+## Features
+
+- **Smart onboarding** → calculates your real targets (BMR via Mifflin-St Jeor, TDEE, deficit/surplus, macros)
+- **Daily dashboard** → calorie ring, macros, water, steps, today's workout, meal suggestions
+- **Food logging** → 60+ food library, custom foods, favorites, recents, saveable custom meals
+- **Live workout logger** → log sets/reps/weight in real time with an auto rest timer; pre-fills last session's weights
+- **Cardio logging** → calorie burn estimated from MET values and body weight
+- **Body tracking** → weight chart, body measurements, Navy-method body-fat estimate, progress photos (camera)
+- **Personal records** → auto-detected from your logged sets, with estimated 1-rep max
+- **Exercise library** → 35+ exercises with form cues
+- **History** → calendar of every logged day, tap to review
+- **Weekly review** → auto-generated insights and adherence score
+- **Achievements** → 24 milestones to unlock
+- **Reminders** → meal, water, workout, and weigh-in notifications
+- **Coach** → personalized nutrition, training, and lifestyle protocols
+- **Data export** → full JSON backup
+- **100% offline & private** → all data stays on the device; no servers, no accounts, no ads
+
+---
+
+## PART 1 — Install the tools (one time)
+
+You need three things installed on your computer.
+
+### 1. Node.js (version 18 or newer)
+Download the **LTS** version from <https://nodejs.org> and install it.
+Verify in a terminal:
+```bash
+node --version    # should print v18.x or higher
+npm --version
+```
+
+### 2. Java JDK 17
+Android builds need Java 17. Download from <https://adoptium.net> (Temurin 17).
+Verify:
+```bash
+java -version     # should print version 17.x
+```
+
+### 3. Android Studio
+Download from <https://developer.android.com/studio> and install with default options.
+On first launch it will download the **Android SDK** — let it finish. Then:
+- Open **Settings → Languages & Frameworks → Android SDK**
+- On the **SDK Platforms** tab, check **Android 14 (API 34)**
+- On the **SDK Tools** tab, make sure **Android SDK Build-Tools** and **Android SDK Platform-Tools** are checked
+- Click **Apply** to download them.
+
+---
+
+## PART 2 — Build the app
+
+Open a terminal **inside the `forge-coach-app` folder** and run these in order.
+
+### 1. Install dependencies
+```bash
+npm install
+```
+
+### 2. Initialize Capacitor (only if it asks — config is already provided)
+The project already has `capacitor.config.json`, so you can skip `cap init`. If for any reason it complains, run:
+```bash
+npx cap init "Forge" "com.forge.coach" --web-dir=www
+```
+
+### 3. Add the Android platform
+```bash
+npx cap add android
+```
+This generates an `android/` folder — a real Android Studio project.
+
+### 4. Generate app icons & splash screen
+```bash
+npx @capacitor/assets generate --android
+```
+This reads `resources/icon.png` and `resources/splash.png` and creates every size Android needs.
+
+### 5. Sync everything into the native project
+```bash
+npx cap sync android
+```
+
+### 6. Open in Android Studio
+```bash
+npx cap open android
+```
+Android Studio launches. Wait for **"Gradle sync"** to finish (bottom status bar). First time can take several minutes.
+
+### 7. Run it on an emulator or your phone
+- **Emulator:** In Android Studio, click **Device Manager → Create Device**, pick e.g. Pixel 7, download a system image (API 34), and start it. Then press the green ▶ **Run** button.
+- **Your phone:** Enable **Developer Options** (tap *Build Number* 7× in Settings → About), turn on **USB debugging**, plug in via USB, then press ▶ **Run**.
+
+🎉 The app installs and launches. Walk through onboarding and you're live.
+
+> **Whenever you change anything in `www/`**, re-run `npx cap sync android` then ▶ Run again.
+
+---
+
+## PART 3 — Publish to Google Play
+
+### 1. Create a Google Play Developer account
+Go to <https://play.google.com/console>, pay the **one-time $25 fee**, and complete identity verification (can take a day or two for approval).
+
+### 2. Create a signing key (this proves the app is yours — keep it safe forever)
+In Android Studio: **Build → Generate Signed Bundle / APK → Android App Bundle → Create new…**
+- Pick a path like `forge-release-key.jks`
+- Set a strong password and remember it
+- Fill in your name/org
+- **⚠️ Back up this `.jks` file and its passwords. If you lose them, you can never update the app again.**
+
+### 3. Build the release bundle (`.aab`)
+Continue the same wizard: choose **release** build variant → **Finish**.
+Android Studio produces a file at:
+```
+android/app/release/app-release.aab
+```
+
+### 4. Create the app in Play Console
+- Click **Create app**, enter the name **Forge**, language, "App", "Free".
+- Work through the left-side checklist: **App content** (privacy policy, ads declaration, content rating questionnaire, target audience, data safety form).
+
+### 5. Required: a privacy policy
+Google requires a public privacy policy URL. Because Forge stores everything **locally and collects nothing**, your policy can be short. A free generator like <https://www.freeprivacypolicy.com> works. State plainly: *"This app stores all data locally on the device. No personal data is collected, transmitted, or shared."* Host it anywhere public (even a free GitHub Pages site) and paste the URL into Play Console.
+
+### 6. Data safety form
+Answer honestly: **no data collected, no data shared.** (True for this app — it never makes network calls except loading Google Fonts; you can self-host the fonts to make it fully offline, see Tips below.)
+
+### 7. Store listing
+Add a short description, full description, your icon (`resources/icon.png`), a feature graphic (1024×500), and at least 2 phone screenshots (just screenshot the running app).
+
+### 8. Upload and roll out
+- Go to **Production → Create new release**.
+- Upload `app-release.aab`.
+- Add release notes, **Save → Review → Start rollout to Production**.
+
+First-time review usually takes a few days. After approval, your app is **live on Google Play**. 🚀
+
+---
+
+## Updating the app later
+
+1. Edit files in `www/`.
+2. Bump `versionCode` and `versionName` in `android/app/build.gradle`.
+3. `npx cap sync android`
+4. Build a new signed `.aab` (same key as before).
+5. Upload as a new release in Play Console.
+
+---
+
+## Tips & notes
+
+- **Fully offline:** the app loads fonts from Google Fonts. To make it 100% offline (and simplify the data-safety form), download the Fraunces / Manrope / JetBrains Mono font files into `www/fonts/` and replace the `<link>` in `index.html` with a local `@font-face`. Optional.
+- **Camera permission:** the `@capacitor/camera` plugin adds the camera permission automatically. The first time a user takes a progress photo, Android asks for permission — that's expected.
+- **Notifications:** reminders are scheduled on-device via `@capacitor/local-notifications`. The user enables them in **Coach → Reminders**; Android will prompt for notification permission.
+- **iOS:** this same project can target iPhone too — run `npx cap add ios` (requires a Mac with Xcode and an Apple Developer account, $99/yr).
+- **Your data persists** between app launches via `@capacitor/preferences` (native secure key-value storage). The **Export all data** button in Settings creates a JSON backup.
+
+---
+
+## ⚠️ Health disclaimer (please keep this in your listing)
+
+Forge gives science-based estimates using standard formulas (Mifflin-St Jeor BMR, activity multipliers, evidence-based macro ranges). It is **not medical advice** and does not replace a doctor or registered dietitian. Users with health conditions, eating-disorder history, or who are pregnant should consult a professional before changing diet or exercise. Consider adding this line to your store description and keeping the in-app disclaimer (already in the Coach tab) intact.
+
+---
+
+Built with care. Now go change some lives. 🔥
