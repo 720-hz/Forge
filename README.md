@@ -121,57 +121,6 @@ Android Studio launches. Wait for **"Gradle sync"** to finish (bottom status bar
 
 ---
 
-## PART 3 — Publish to Google Play
-
-### 1. Create a Google Play Developer account
-Go to <https://play.google.com/console>, pay the **one-time $25 fee**, and complete identity verification (can take a day or two for approval).
-
-### 2. Create a signing key (this proves the app is yours — keep it safe forever)
-In Android Studio: **Build → Generate Signed Bundle / APK → Android App Bundle → Create new…**
-- Pick a path like `forge-release-key.jks`
-- Set a strong password and remember it
-- Fill in your name/org
-- **⚠️ Back up this `.jks` file and its passwords. If you lose them, you can never update the app again.**
-
-### 3. Build the release bundle (`.aab`)
-Continue the same wizard: choose **release** build variant → **Finish**.
-Android Studio produces a file at:
-```
-android/app/release/app-release.aab
-```
-
-### 4. Create the app in Play Console
-- Click **Create app**, enter the name **Forge**, language, "App", "Free".
-- Work through the left-side checklist: **App content** (privacy policy, ads declaration, content rating questionnaire, target audience, data safety form).
-
-### 5. Required: a privacy policy
-Google requires a public privacy policy URL. Because Forge stores everything **locally and collects nothing**, your policy can be short. A free generator like <https://www.freeprivacypolicy.com> works. State plainly: *"This app stores all data locally on the device. No personal data is collected, transmitted, or shared."* Host it anywhere public (even a free GitHub Pages site) and paste the URL into Play Console.
-
-### 6. Data safety form
-Answer honestly: **no data collected, no data shared.** (True for this app — it never makes network calls except loading Google Fonts; you can self-host the fonts to make it fully offline, see Tips below.)
-
-### 7. Store listing
-Add a short description, full description, your icon (`resources/icon.png`), a feature graphic (1024×500), and at least 2 phone screenshots (just screenshot the running app).
-
-### 8. Upload and roll out
-- Go to **Production → Create new release**.
-- Upload `app-release.aab`.
-- Add release notes, **Save → Review → Start rollout to Production**.
-
-First-time review usually takes a few days. After approval, your app is **live on Google Play**. 🚀
-
----
-
-## Updating the app later
-
-1. Edit files in `www/`.
-2. Bump `versionCode` and `versionName` in `android/app/build.gradle`.
-3. `npx cap sync android`
-4. Build a new signed `.aab` (same key as before).
-5. Upload as a new release in Play Console.
-
----
-
 ## Tips & notes
 
 - **Fully offline:** the app loads fonts from Google Fonts. To make it 100% offline (and simplify the data-safety form), download the Fraunces / Manrope / JetBrains Mono font files into `www/fonts/` and replace the `<link>` in `index.html` with a local `@font-face`. Optional.
@@ -188,4 +137,4 @@ Forge gives science-based estimates using standard formulas (Mifflin-St Jeor BMR
 
 ---
 
-Built with care. Now go change some lives. 🔥
+Built with care. Now Forge yourself and level up your game. 🔥
